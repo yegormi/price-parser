@@ -30,11 +30,12 @@ while True:
                 print("HTML page is parsed")
 
             # Find the element that contains the price
+            name_element = soup.find('h1', class_='changeName')
             price_element = soup.find('a', class_='price changePrice')
             if is_debug:
-                print("Found the price element")
+                print("Found elements")
 
-            if price_element:
+            if price_element and name_element:
                 # Extract the current price (assuming it's in the format "63 139 ₴")
                 current_price = int(price_element.text.strip().replace('₴', '').replace(' ', ''))
                 if is_debug:
@@ -45,17 +46,18 @@ while True:
                     # First time checking, set the old price and timestamp
                     old_price = current_price
                     timestamp = datetime.now()
-                    print(f"Initial price: {current_price} ₴")
-                    continue
-                elif current_price != old_price:
-                    # Price has changed, send a notification with timestamp
-                    new_timestamp = datetime.now()
-                    print(f"Price changed from {old_price} ₴ to {current_price} ₴ at {new_timestamp}.")
-                    old_price = current_price
-                else:
-                    print(f"No price change detected at {datetime.now()}.")
+                    print(f"Model: {name_element.text}")
+                    print(f"Price: {current_price} ₴ at {timestamp}.")
+                else:            
+                    if current_price != old_price:
+                        # Price has changed, send a notification with timestamp
+                        new_timestamp = datetime.now()
+                        print(f"Price changed from {old_price} ₴ to {current_price} ₴ at {new_timestamp}.")
+                        old_price = current_price
+                    else:
+                        print(f"No price change detected at {datetime.now()}.")
             else:
-                print("Price element not found on the page.")
+                print("Elements are not found on the page.")
         else:
             print("Failed to fetch the webpage. Check your internet connection or the URL.")
 
