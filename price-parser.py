@@ -60,7 +60,7 @@ while True:
             print("Failed to fetch the webpage. Check your internet connection or the URL.")
 
         # Wait for an hour before checking again (3600 seconds)
-        time.sleep(1800)
+        time.sleep(15*60)
     except KeyboardInterrupt:
         # Exit the loop if the user interrupts (e.g., Ctrl+C)
         break
