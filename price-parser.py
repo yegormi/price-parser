@@ -1,10 +1,12 @@
 import requests
 from bs4 import BeautifulSoup
 import time
+from datetime import datetime
 
 # Define the URL of the website
 url = "https://touch.com.ua/item/apple-macbook-air-13-retina-m2-8-core-cpu-10-core-gpu-16-core-neural-engine-8gb-ram-512gb-ssd-starli_1/"
-# Define the initial price
+
+# Define the initial price and timestamp
 old_price = None
 
 is_debug = False
@@ -21,8 +23,8 @@ while True:
         if response.status_code == 200:
             if is_debug:
                 print("HTTP request is successful")
-                # Parse the HTML content of the page
 
+            # Parse the HTML content of the page
             soup = BeautifulSoup(response.text, 'html.parser')
             if is_debug:
                 print("HTML page is parsed")
@@ -40,26 +42,25 @@ while True:
 
                 # Check if the price has changed
                 if old_price is None:
-                    # First time checking, set the old price
+                    # First time checking, set the old price and timestamp
                     old_price = current_price
+                    timestamp = datetime.now()
+                    print(f"Initial price: {current_price} ₴")
                     continue
-                elif current_price == old_price:
-                    # Price hasn't changed, send a notification
-                    if is_price_shown:
-                        print(f"Not changed: {current_price} ₴")
-                else:
-                    # Price has changed, send a notification
-                    if is_debug:
-                        print(f"-> -> Price is changed from {old_price} ₴ to {current_price} ₴\n")
+                elif current_price != old_price:
+                    # Price has changed, send a notification with timestamp
+                    new_timestamp = datetime.now()
+                    print(f"Price changed from {old_price} ₴ to {current_price} ₴ at {new_timestamp}.")
                     old_price = current_price
-                    break
+                else:
+                    print(f"No price change detected at {datetime.now()}.")
             else:
                 print("Price element not found on the page.")
         else:
             print("Failed to fetch the webpage. Check your internet connection or the URL.")
 
         # Wait for an hour before checking again (3600 seconds)
-        time.sleep(10)
+        time.sleep(1800)
     except KeyboardInterrupt:
         # Exit the loop if the user interrupts (e.g., Ctrl+C)
         break
