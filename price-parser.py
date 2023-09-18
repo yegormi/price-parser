@@ -42,23 +42,24 @@ while True:
                 if old_price is None:
                     # First time checking, set the old price
                     old_price = current_price
+                    continue
                 elif current_price == old_price:
-                    # Price hasn't changed, send a notification or message to yourself
+                    # Price hasn't changed, send a notification
                     if is_price_shown:
                         print(f"Not changed: {current_price} ₴")
-                elif current_price != old_price:
-                    old_price = current_price
-                    # Price has changed, send a notification or message to yourself
+                else:
+                    # Price has changed, send a notification
                     if is_debug:
-                        print(f"-> -> Price is changed from {old_price} ₴ to {current_price} ₴")
-                        break
+                        print(f"-> -> Price is changed from {old_price} ₴ to {current_price} ₴\n")
+                    old_price = current_price
+                    break
             else:
                 print("Price element not found on the page.")
         else:
             print("Failed to fetch the webpage. Check your internet connection or the URL.")
 
         # Wait for an hour before checking again (3600 seconds)
-        time.sleep()
+        time.sleep(10)
     except KeyboardInterrupt:
         # Exit the loop if the user interrupts (e.g., Ctrl+C)
         break
