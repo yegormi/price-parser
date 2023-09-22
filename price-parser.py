@@ -66,3 +66,6 @@ while True:
     except KeyboardInterrupt:
         # Exit the loop if the user interrupts (e.g., Ctrl+C)
         break
+    except Exception as e:
+        # Catch all other exceptions and print the error message
+        print(f"Error: {str(e)}")
